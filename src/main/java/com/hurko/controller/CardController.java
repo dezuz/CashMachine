@@ -4,7 +4,15 @@ import com.hurko.model.dto.Card;
 import com.hurko.service.CardService;
 import com.hurko.transformer.CardTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,20 +27,20 @@ public class CardController {
     @Autowired
     private CardTransformer cardTransformer;
 
-    @PostMapping(path = "/put")
-    public void putMoney(@RequestParam int money, @RequestParam String number) {
-        cardService.putMoney(money, number);
+    @PostMapping(path = "/replenishment")
+    public void replenishmentMoney(@RequestParam int sum, @RequestParam String account) {
+        cardService.replenishmentMoney(sum, account);
     }
 
-    @PostMapping(path = "/get")
-    public void getMoney(Principal principal, @RequestParam Integer money, @RequestParam String number) {
-        cardService.getMoney(principal, money, number);
+    @PostMapping(path = "/withdraw")
+    public void withdrawMoney(Principal principal, @RequestParam Integer sum, @RequestParam String account) {
+        cardService.withdrawMoney(principal, sum, account);
     }
 
     @PostMapping(path = "/transfer")
-    public void transferMoney(Principal principal, @RequestParam Integer money,
-                              @RequestParam String fromCardNumber, @RequestParam String toCardNumber) {
-        cardService.transferMoney(principal, money, fromCardNumber, toCardNumber);
+    public void transferMoney(Principal principal, @RequestParam Integer sum,
+                              @RequestParam String fromAccount, @RequestParam String toAccount) {
+        cardService.transferMoney(principal, sum, fromAccount, toAccount);
     }
 
     @GetMapping

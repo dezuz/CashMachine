@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CardService {
 
-    void putMoney(Integer money, String number);
+    void replenishmentMoney(Integer sum, String account);
 
-    void getMoney(Principal principal, Integer money, String number);
+    void withdrawMoney(Principal principal, Integer sum, String account);
 
-    void transferMoney(Principal principal, Integer money, String fromCardNumber, String toCardNumber);
+    void transferMoney(Principal principal, Integer sum, String fromAccount, String toAccount);
 
     List<CardEntity> findAll();
 

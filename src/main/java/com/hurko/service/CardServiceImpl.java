@@ -24,11 +24,11 @@ public class CardServiceImpl implements CardService {
     private UserRepository userRepository;
 
     @Override
-    public void putMoney(Integer money, String number) {
-        CardEntity card = cardRepository.findByNumber(number);
+    public void replenishmentMoney(Integer sum, String account) {
+        CardEntity card = cardRepository.findByNumber(account);
         if (Objects.nonNull(card)) {
-            if (money % 100 == 0) {
-                int newBalance = card.getBalance() + money;
+            if (sum % 100 == 0) {
+                int newBalance = card.getBalance() + sum;
                 cardRepository.save(card.setBalance(newBalance));
             } else {
                 throw new IncorrectMoneyValue("You can only put amount of money which is a multiple of 100");
@@ -39,13 +39,13 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void getMoney(Principal principal, Integer money, String number) {
+    public void withdrawMoney(Principal principal, Integer sum, String account) {
         UserEntity user = userRepository.findByName(principal.getName());
-        CardEntity card = cardRepository.findByNumber(number);
+        CardEntity card = cardRepository.findByNumber(account);
         if (Objects.nonNull(user) && Objects.nonNull(card)) {
             if (card.getUser().getId() == user.getId()) {
-                if (card.getBalance() > money && money % 100 == 0) {
-                    int newBalance = card.getBalance() - money;
+                if (card.getBalance() > sum && sum % 100 == 0) {
+                    int newBalance = card.getBalance() - sum;
                     cardRepository.save(card.setBalance(newBalance));
                 } else {
                     throw new IncorrectMoneyValue("Please write correct amount of money");
@@ -59,16 +59,16 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void transferMoney(Principal principal, Integer money, String fromCardNumber, String toCardNumber) {
+    public void transferMoney(Principal principal, Integer sum, String fromAccount, String toAccount) {
         UserEntity user = userRepository.findByName(principal.getName());
-        CardEntity fromCard = cardRepository.findByNumber(fromCardNumber);
-        CardEntity toCard = cardRepository.findByNumber(toCardNumber);
+        CardEntity fromCard = cardRepository.findByNumber(fromAccount);
+        CardEntity toCard = cardRepository.findByNumber(toAccount);
         if (Objects.nonNull(user) && Objects.nonNull(fromCard) && Objects.nonNull(toCard)) {
             if (fromCard.getUser().getId() == user.getId()) {
-                if (fromCard.getBalance() > money) {
-                    int newBalance = fromCard.getBalance() - money;
+                if (fromCard.getBalance() > sum) {
+                    int newBalance = fromCard.getBalance() - sum;
                     cardRepository.save(fromCard.setBalance(newBalance));
-                    newBalance = toCard.getBalance() + money;
+                    newBalance = toCard.getBalance() + sum;
                     cardRepository.save(toCard.setBalance(newBalance));
                 } else {
                     throw new IncorrectMoneyValue("There is not enough money on your balance");

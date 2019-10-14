@@ -21,7 +21,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
         encoders.put("pbkdf2", new Pbkdf2PasswordEncoder());
         encoders.put("scrypt", new SCryptPasswordEncoder());
-        encoders.put("sha256", new StandardPasswordEncoder());
+        encoders.put("sha512", new StandardPasswordEncoder());
 
         return new DelegatingPasswordEncoder(idForEncode, encoders);
     }
